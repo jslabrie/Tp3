@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 import api
 import minimax
+import time
 
 
 def analyser_commande():
@@ -62,6 +63,19 @@ def afficher_damier_ascii(game_state):
 
     print(tot)
 
+def gagnant_etat(state):
+    if state['joueurs'][0]['pos'][1] == 9:
+        return 1
+    if state['joueurs'][1]['pos'][1] == 1:
+        return 2
+    return None
+
+def decoder_lister(liste):
+    print('20 dernières parties:')
+    for i in range(len(liste)):
+        print(f"{gagnant_etat(liste[i]['état'])}")
+
+
 
 def make_grid_list():
     '''Retourne une liste 2d correspondant à un jeu vide'''
@@ -103,7 +117,8 @@ if __name__ == '__main__':
 
         while EN_JEU:
             try:
-                LIST_POS_COUP, TYPE_COUP = minimax.calc_best_move(ETAT, 1)
+                LIST_POS_COUP, TYPE_COUP, ETAT = minimax.calc_best_move(ETAT, 1)
+                afficher_damier_ascii(ETAT)
                 try:
                     POS_COUP = (int(LIST_POS_COUP[0]), int(LIST_POS_COUP[1]))
                 except Exception:
@@ -115,7 +130,7 @@ if __name__ == '__main__':
                 #     assert 2 <= POS_COUP[0] <= 9 and 1 <= POS_COUP[1] <= 8, "Indice invalide"
 
                 ETAT = api.jouer_coup(ID_PARTIE, TYPE_COUP, POS_COUP)
-
+                time.sleep(1)
                 afficher_damier_ascii(ETAT)
 
             except AssertionError as err:
@@ -126,6 +141,7 @@ if __name__ == '__main__':
                 print(err)
 
             except StopIteration as gagnant:
+                afficher_damier_ascii(ETAT)
                 print(str(gagnant) + 'a gagné la partie!')
                 EN_JEU = False
 
@@ -133,4 +149,4 @@ if __name__ == '__main__':
                 print("\nPartie annulée par l'utilisateur\n")
                 EN_JEU = False
     else:
-        print(api.lister_parties(IDUL_ARG))
+        decoder_lister(api.lister_parties(IDUL_ARG))

@@ -2,7 +2,6 @@ import turtle
 from quoridor import Quoridor
 
 
-
 class QuoridorX(Quoridor):
     def __init__(self, joueurs, murs=None):
         super().__init__(joueurs, murs=None)
@@ -22,8 +21,8 @@ class QuoridorX(Quoridor):
         pen.sety(-250)
         pen.pd()
 
-        # Création graphique
-        # Contour
+        # Création du graphique
+        # Contour de la table
         pen.color('black', 'white')
         pen.width(4)
         pen.begin_fill()
@@ -50,7 +49,7 @@ class QuoridorX(Quoridor):
         pen.end_fill()
         pen.pd()
 
-        # Colonnes
+        # Colonnes de la table
         pen.setx(-250)
         pen.sety(-250)
         pen.left(90)
@@ -69,7 +68,7 @@ class QuoridorX(Quoridor):
             pen.forward(500)
             pen.left(90)
 
-        # Lignes
+        # Lignes de la table
         for i in range(5):
             pen.left(90)
             pen.pu()

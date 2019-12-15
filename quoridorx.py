@@ -1,7 +1,7 @@
 import turtle
 from turtle import *
-
-class QuoridorX(quoridor):
+import Quoridor
+class QuoridorX(Quoridor):
     def afficher(self, état_parties):
 
         #Base 

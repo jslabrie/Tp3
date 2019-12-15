@@ -30,7 +30,7 @@ pen.pd()
 # Création graphique
 
 # Contour
-pen.color('black', 'yellow')
+pen.color('black', 'white')
 pen.width(4)
 pen.begin_fill()
 for i in range(2):
@@ -128,7 +128,7 @@ pen.left(90)
 pen.forward(25)
 pen.forward(50 * (position_joueur[1]-1))
 pen.pd()
-pen.dot(40, 'green')
+pen.dot(40, 'pink')
 pen.pu()
 pen.backward(13)
 pen.left(90)
@@ -157,7 +157,7 @@ pen.write('2', font=('Time', 20, 'normal'))
 pen.pu()
 
 # Placer murs
-pen.color('red')
+pen.color('purple')
 pen.width(6)
 pen.setx(-200)
 pen.sety(-200)
@@ -191,7 +191,7 @@ for y in position_murs:
     pen.sety(-200)
     pen.right(90)
     
-
+pen.hideturtle()
 
 
 

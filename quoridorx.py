@@ -2,6 +2,7 @@ import turtle
 from quoridor import Quoridor
 
 
+
 class QuoridorX(Quoridor):
     def __init__(self, joueurs, murs=None):
         super().__init__(joueurs, murs=None)
@@ -23,7 +24,7 @@ class QuoridorX(Quoridor):
 
         # Création graphique
         # Contour
-        pen.color('black', 'turquoise')
+        pen.color('black', 'white')
         pen.width(4)
         pen.begin_fill()
         for i in range(2):
@@ -119,7 +120,7 @@ class QuoridorX(Quoridor):
         pen.forward(25)
         pen.forward(50 * (position_joueur[1]-1))
         pen.pd()
-        pen.dot(40, 'red')
+        pen.dot(40, 'pink')
         pen.pu()
         pen.backward(13)
         pen.left(90)
@@ -148,7 +149,7 @@ class QuoridorX(Quoridor):
         pen.pu()
 
         # Placer les murs
-        pen.color('red')
+        pen.color('purple')
         pen.width(6)
         pen.setx(-200)
         pen.sety(-200)
@@ -181,7 +182,7 @@ class QuoridorX(Quoridor):
             pen.setx(-200)
             pen.sety(-200)
             pen.right(90)
-
+        pen.hideturtle()
 
 
 while True:

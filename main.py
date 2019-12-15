@@ -6,6 +6,7 @@ import api
 def analyser_commande():
     '''Traitement des arguments passés dans l'invité de commandes'''
     parser = ArgumentParser(description='Jeu Quoridor - Phase 3')
+    
     #Positional arguments
     parser.add_argument('idul', metavar='idul', help='IDUL du joueur', type=str)
 

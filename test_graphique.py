@@ -157,8 +157,8 @@ pen.write('2', font=('Time', 20, 'normal'))
 pen.pu()
 
 # Placer murs
-pen.color('purple')
-pen.width(6)
+pen.color('black')
+pen.width(7)
 pen.setx(-200)
 pen.sety(-200)
 pen.right(90)

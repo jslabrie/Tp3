@@ -148,7 +148,7 @@ class QuoridorX(Quoridor):
         pen.pu()
 
         # Placer les murs
-        pen.color('purple')
+        pen.color('black')
         pen.width(6)
         pen.setx(-200)
         pen.sety(-200)

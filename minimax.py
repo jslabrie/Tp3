@@ -5,21 +5,13 @@ from copy import deepcopy
 import networkx as nx
 import quoridor
 
+POIDS_1 = 10
+POIDS_2 = 0
+POIDS_3 = 0
+NODES_ANALYSED = 0
 
-class Node(object):
-    '''
-    Représente un noeud d'arbre pour l'algorithme minimax.
 
-    Attributes:
-        depth (int): Représente la profondeur du noeud dans l'arbre (0+).
-        maximizingPlayer (bool): True si le noeud est celui du joueur cherchant à maximiser.
-        state (dict): État du jeu correspondant au noeud.
-        graphe: graphe networkx de l'état de jeu
-        value (int): Valeur du noeud selon la métrique utilisée (ici delta).
-        children (list): Liste des enfants du noeuds.
-        descendants (int): Nombre de descendants que le noeud doit avoir
-    '''
-
+class Node(object):   
     def __init__(self, depth, maximizingPlayer, state, value=0):
         self.depth = depth
         # print(depth, end='-')
@@ -39,34 +31,37 @@ class Node(object):
             for pos in walls["horizontaux"]:
                 new_state = self.new_game_state(pos, 'MH')
                 if new_state is not None:
-                    value = self.calcValue(new_state, 'MH', position=pos)
-                    if value != 0:
-                        yield Node(
-                            self.depth - 1,
-                            not (self.maximizingPlayer),
-                            new_state,
-                            value
-                        )
+                    value = self.calcValue(new_state)
+                    #if value != 0:
+                    yield Node(
+                        self.depth - 1,
+                        not (self.maximizingPlayer),
+                        new_state,
+                        value
+                    )
 
             for pos in walls["verticaux"]:
                 new_state = self.new_game_state(pos, 'MV')
                 if new_state is not None:
-                    value = self.calcValue(new_state, 'MV', position=pos)
-                    if value != 0:
-                        yield Node(
-                            self.depth - 1,
-                            not (self.maximizingPlayer),
-                            new_state,
-                            value
-                        )
-
-            new_state_pos = self.new_game_state(self.best_movement(), 'D')
-            yield Node(
-                self.depth - 1,
-                not (self.maximizingPlayer),
-                new_state_pos,
-                self.calcValue(new_state_pos, 'D')
-            )
+                    value = self.calcValue(new_state)
+                    #if value != 0:
+                    yield Node(
+                        self.depth - 1,
+                        not (self.maximizingPlayer),
+                        new_state,
+                        value
+                    )
+            li = self.movements()
+            for pos in li:
+                new_state_pos = self.new_game_state(pos, 'D')
+                if new_state_pos is not None:
+                    value = self.calcValue(new_state_pos)
+                    yield Node(
+                        self.depth - 1,
+                        not (self.maximizingPlayer),
+                        new_state_pos,
+                        value
+                    )
 
     def new_game_state(self, position, operation):
         '''
@@ -95,7 +90,7 @@ class Node(object):
         else:
             return new_state
 
-    def calcValue(self, state, move_type, position=None):
+    def calcValue(self, state):
         """Calcule la valeur du noeud selon le delta des positions
 
         Arguments:
@@ -108,8 +103,6 @@ class Node(object):
         Returns:
             float -- La valeur du noeud
         """
-        value = 0
-
         graphe = construire_graphe(
             [player['pos'] for player in state['joueurs']],
             state['murs']['horizontaux'],
@@ -118,37 +111,41 @@ class Node(object):
 
         pos_1 = state["joueurs"][0]["pos"]
         pos_2 = state["joueurs"][1]["pos"]
-        # Si gagné
 
-        bias = 0
-        if move_type in ('MH', 'MV'):
-            pass
-            # if self.maximizingPlayer:
-            #     bias = 0.2 * (10 - abs(position[1] - pos_2[1]))
-            # else:
-            #     bias = -0.2 * (10 - abs(position[1] - pos_1[1]))
-        else:
-            pass
-            # if self.maximizingPlayer:
-            #     bias = 0.5
-            # else:
-            #     bias = -0.5
+        shortest_B = nx.shortest_path(graphe, pos_2, 'B2')
+        shortest_A = nx.shortest_path(graphe, pos_1, 'B1')
 
+        # Partie gagnée
         if pos_1[1] == 9:
-            value = 1000
+            win = 1000
         elif pos_2[1] == 1:
-            value = -1000
+            win = -1000
         else:
-            delta_1 = len(nx.shortest_path(
-                self.graphe, pos_2, 'B2')) - len(nx.shortest_path(self.graphe, pos_1, 'B1'))
-            delta_2 = len(nx.shortest_path(
-                graphe, pos_2, 'B2')) - len(nx.shortest_path(graphe, pos_1, 'B1'))
-            value = delta_2
+            win = 0
 
-            if delta_2 - delta_1 == 0:
-                return 0
-            
-        return value + bias
+        # Critère 1: Delta des distances
+        delta = len(shortest_B) - len(shortest_A)
+        
+        # Critère 2: Distance du max de la prochaine rangée
+        current_row = shortest_A[0][1]
+        dist_a = 1
+        for i in range(len(shortest_A) - 1):
+            if shortest_A[i][1] > current_row:
+                dist_a = i
+                break
+        evaluation_a = 1 / dist_a
+        
+
+        # Critère 3: Distance du min de la prochaine rangée
+        current_row = shortest_B[0][1]
+        dist_b = 1
+        for i in range(len(shortest_B) - 1):
+            if shortest_B[i][1] < current_row:
+                dist_b = i
+                break
+        evaluation_b = -1 / dist_b
+
+        return  win + (delta * POIDS_1) + (POIDS_2 * evaluation_a) + (POIDS_3 * evaluation_b)
 
     def available_wall_positions(self):
         '''
@@ -162,14 +159,22 @@ class Node(object):
         
         if self.maximizingPlayer:
             player = 0
+            target = 'B1'
         else:
             player = 1
+            target = 'B2'
 
         if self.state['joueurs'][player]['murs'] == 0:
             horizontal_positions = []
             vertical_positions = []
         else:
-        # Horizontaux invalides
+            
+            positions_path = nx.shortest_path(
+                self.graphe, self.state['joueurs'][player]['pos'], target)[:-1]
+
+            print(positions_path)
+            # Horizontaux invalides
+
             for position in self.state["murs"]["horizontaux"]:
                 pos_list = [
                     position,
@@ -186,6 +191,19 @@ class Node(object):
                     vertical_positions.remove(position_ver)
                 except ValueError:
                     pass
+            
+            for position in horizontal_positions:
+
+                useless = True
+                for pos in positions_path:
+                    if abs(position[0] - pos[0]) <= 1 or abs(position[1] - pos[1]) <= 1:
+                        useless = False
+
+                if useless:
+                    try:
+                        horizontal_positions.remove(position)
+                    except ValueError:
+                        pass
 
             # Verticaux invalides
             for position in self.state["murs"]["verticaux"]:
@@ -205,15 +223,36 @@ class Node(object):
                 except ValueError:
                     pass
 
+            for position in vertical_positions:
+                useless = True
+                for pos in positions_path:
+                    if abs(position[0] - pos[0]) <= 1 or abs(position[1] - pos[1]) <= 1:
+                        useless = False
+
+                if useless:
+                    try:
+                        vertical_positions.remove(position)
+                    except ValueError:
+                        pass
+
+            
+
         return {"horizontaux": horizontal_positions, "verticaux": vertical_positions}
 
-    def best_movement(self):
-        '''Revoie le tuple du meilleur déplacement que le joueur peut effectuer'''
+    def movements(self):
+        '''Revoie une liste des déplacements que le joueur peut effectuer'''
 
         if self.maximizingPlayer:
-            return nx.shortest_path(self.graphe, self.state["joueurs"][0]["pos"], 'B1')[1]
+            item = nx.shortest_path(self.graphe,
+                self.state["joueurs"][0]["pos"],
+                'B1'
+            )[1]
         else:
-            return nx.shortest_path(self.graphe, self.state["joueurs"][1]["pos"], 'B2')[1]
+            item = nx.shortest_path(self.graphe,
+                self.state["joueurs"][1]["pos"],
+                'B2'
+            )[1]
+        return [item]
 
     def blocks_player(self, graphe):
         '''Retourne True si le placement de mur pour l'état bloque un joueur'''
@@ -228,8 +267,9 @@ class Node(object):
 
 
 def minimax(node, depth, alpha, beta, maximizingPlayer):
-
+    global NODES_ANALYSED
     if depth == 0 or abs(node.value) >= 1000:
+        NODES_ANALYSED += 1
         return node.value, node.state
 
     if maximizingPlayer:
@@ -260,6 +300,7 @@ def minimax(node, depth, alpha, beta, maximizingPlayer):
 
 
 def calc_best_move(currentState, player):
+    global NODES_ANALYSED
     depth = 1
     if player == 1:
         maximizingPlayer = True
@@ -274,31 +315,32 @@ def calc_best_move(currentState, player):
     for i in range(len(currentState['murs']['verticaux'])):
         currentState['murs']['verticaux'][i] = tuple(currentState['murs']['verticaux'][i])
 
-
+    NODES_ANALYSED = 0
     node = Node(depth, maximizingPlayer, currentState)
     val, new_state = minimax(node, depth, float("-inf"),
                              float("+inf"), maximizingPlayer)
+    print(f'Nodes analysed: {NODES_ANALYSED}')
 
     # Décoder le changement
     # Si déplacement
     for i in range(2):
         if currentState["joueurs"][i]["pos"] != new_state["joueurs"][i]["pos"]:
-            move = (new_state["joueurs"][i]["pos"],  'D')
+            move = (new_state["joueurs"][i]["pos"],  'D', new_state)
 
     # Si MH
     if len(currentState["murs"]["horizontaux"]) != 0:
         if currentState["murs"]["horizontaux"][-1] != new_state["murs"]["horizontaux"][-1]:
-            move = (new_state["murs"]["horizontaux"][-1], 'MH')
+            move = (new_state["murs"]["horizontaux"][-1], 'MH', new_state)
     else:
         if len(new_state["murs"]["horizontaux"]) != 0:
-            move = (new_state["murs"]["horizontaux"][0], 'MH')
+            move = (new_state["murs"]["horizontaux"][0], 'MH', new_state)
 
     # Si MV
     if len(currentState["murs"]["verticaux"]) != 0:
         if currentState["murs"]["verticaux"][-1] != new_state["murs"]["verticaux"][-1]:
-            move = (new_state["murs"]["verticaux"][-1], 'MV')
+            move = (new_state["murs"]["verticaux"][-1], 'MV', new_state)
     else:
         if len(new_state["murs"]["verticaux"]) != 0:
-            move = (new_state["murs"]["verticaux"][0], 'MV')
+            move = (new_state["murs"]["verticaux"][0], 'MV', new_state)
 
     return move

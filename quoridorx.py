@@ -3,6 +3,7 @@ from quoridor import Quoridor
 
 
 class QuoridorX(Quoridor):
+
     def __init__(self, joueurs, murs=None):
        Quoridor.__init__(self, joueurs, murs=None)
        self.état_actuel = Quoridor.état_partie(self)
@@ -183,3 +184,9 @@ class QuoridorX(Quoridor):
             pen.right(90)
         pen.hideturtle()
         turtle.done()
+
+# Pour tester
+if __name__ == "__main__":
+    état = QuoridorX('js')
+    état.afficher()
+

@@ -301,7 +301,7 @@ def minimax(node, depth, alpha, beta, maximizingPlayer):
 
 def calc_best_move(currentState, player):
     global NODES_ANALYSED
-    depth = 2
+    depth = 1
     if player == 1:
         maximizingPlayer = True
     else:

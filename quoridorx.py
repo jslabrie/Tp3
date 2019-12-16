@@ -5,6 +5,7 @@ from quoridor import Quoridor
 class QuoridorX(Quoridor):
     def __init__(self, joueurs, murs=None):
        Quoridor.__init__(self, joueurs, murs=None)
+       self.état_actuel = Quoridor.état_partie
         
     def afficher(self):
         # Initialisation du graphique

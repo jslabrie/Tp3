@@ -4,9 +4,8 @@ from quoridor import Quoridor
 
 class QuoridorX(Quoridor):
     def __init__(self, joueurs, murs=None):
-        super().__init__(joueurs, murs=None)
-        self.état_actuel = Quoridor.état_partie(self)
-
+       Quoridor.__init__(self, joueurs, murs=None)
+        
     def afficher(self):
         # Initialisation du graphique
         écran = turtle.Screen()

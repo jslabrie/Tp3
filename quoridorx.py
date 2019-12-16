@@ -7,8 +7,6 @@ class QuoridorX(Quoridor):
     def __init__(self, joueurs, murs=None):
         Quoridor.__init__(self, joueurs, murs=None)
         self.état_actuel = Quoridor.état_partie(self)
-
-    def afficher(self):
         # Initialisation du graphique
         écran = turtle.Screen()
         écran.setup(width=600, height=600)
@@ -107,11 +105,15 @@ class QuoridorX(Quoridor):
             pen.forward(25)
             pen.write(i+1, font=('Time', 30, 'normal'))
             pen.forward(25)
-            
+
+    def afficher(self):
+        pen = turtle.Turtle()
+        pen.speed(0)
+        pen.pu()
+
         # Placer les joueurs
         pen.setx(-200)
         pen.sety(-200)
-        pen.right(90)
 
         position_joueur = self.état_actuel['joueurs'][0]['pos']
         pen.forward(25)
@@ -182,6 +184,7 @@ class QuoridorX(Quoridor):
             pen.sety(-200)
             pen.right(90)
         pen.hideturtle()
+        pen.clear()
         
 
 

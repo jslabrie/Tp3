@@ -17,5 +17,3 @@ def analyser_commande():
     parser.add_argument('-x','--graphique', action='store_true', help="Activer le mode graphique")
     return parser.parse_args()
 
-if __name__ == "__main__":
-    print(analyser_commande())

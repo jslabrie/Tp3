@@ -5,7 +5,7 @@ from quoridor import Quoridor
 class QuoridorX(Quoridor):
     def __init__(self, joueurs, murs=None):
        Quoridor.__init__(self, joueurs, murs=None)
-       self.état_actuel = Quoridor.état_partie
+       self.état_actuel = Quoridor.état_partie(self)
         
     def afficher(self):
         # Initialisation du graphique
@@ -182,7 +182,8 @@ class QuoridorX(Quoridor):
             pen.sety(-200)
             pen.right(90)
         pen.hideturtle()
+        turtle.done()
 
 
-while True:
-    QuoridorX.afficher()
+état = QuoridorX('js')
+état.afficher()

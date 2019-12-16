@@ -1,6 +1,8 @@
 '''Module principal'''
 from argparse import ArgumentParser
-import api
+from quoridor import Quoridor, QuoridorError
+from quoridorx import QuoridorX
+from api import débuter_partie, jouer_coup
 
 
 def analyser_commande():
@@ -8,7 +10,7 @@ def analyser_commande():
     parser = ArgumentParser(description='Jeu Quoridor - phase 3')
     
     #Positional arguments
-    parser.add_argument('idul', metavar='idul', help='IDUL du joueur', type=str)
+    parser.add_argument('idul', metavar='IDUL', help='IDUL du joueur', type=str)
 
     #Optional arguments
     parser.add_argument('-a','--automatique', action='store_true', help="Activer le mode automatique")
@@ -17,4 +19,3 @@ def analyser_commande():
 
 if __name__ == "__main__":
     print(analyser_commande())
-

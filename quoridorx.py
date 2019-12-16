@@ -183,7 +183,3 @@ class QuoridorX(Quoridor):
             pen.right(90)
         pen.hideturtle()
         turtle.done()
-
-
-état = QuoridorX('js')
-état.afficher()

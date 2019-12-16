@@ -252,14 +252,6 @@ class Node(object):
                 self.state["joueurs"][1]["pos"],
                 'B2'
             )[1]
-
-        # if self.maximizingPlayer:
-        #     li = list(self.graphe.successors(self.state["joueurs"][0]["pos"]))
-        # else:
-        #     li = list(self.graphe.successors(self.state["joueurs"][1]["pos"]))
-        # for item in li:
-        #     if isinstance(item, str):
-        #         li.remove(item)
         return [item]
 
     def blocks_player(self, graphe):

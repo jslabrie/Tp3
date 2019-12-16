@@ -18,4 +18,5 @@ def analyser_commande():
     return parser.parse_args()
 
 if __name__ == "__main__":
+    analyser_commande()
     print(analyser_commande())

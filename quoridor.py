@@ -100,7 +100,6 @@ class Quoridor:
 
         self.murs = murs
         self.état_partie()
-        self.état_actuel = {}
 
     def __str__(self):
         """

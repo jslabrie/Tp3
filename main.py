@@ -92,7 +92,7 @@ def boucle_jeu(args):
 
                 etat = jouer_coup(id_partie, type_coup, pos_coup)
                 game.afficher()
-                sleep(2)
+                # sleep(2)
             
             if args.graphique:
                 game = QuoridorX((etat['joueurs'][0], etat['joueurs'][1]), etat['murs'])

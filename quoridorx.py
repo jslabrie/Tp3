@@ -168,7 +168,6 @@ class QuoridorX(Quoridor):
             pen.sety(-200)
             pen.left(90)
 
-
         pen.right(90)
         position_murs = self.état_actuel['murs']['verticaux']
         for y in position_murs:

@@ -1,19 +1,45 @@
 # Projet phase 3
 
-### Instructions pour que tout roule sur des roues
+### Instructions pour que tout roule comme sur des roues
 
 #### Sur GitHub
 Fork le [projet principal](https://github.com/TP2-Python/Tp3.git).
+Copier le lien de votre fork.
+
+Dans votre fork, créer une nouvelle branche
 
 #### Sur votre ordinateur
 1. Créer un nouveau dossier pour le projet et l'ouvrir avec VS Code.
 2. Ouvrir un terminal.
-3. Écrire la suite de commandes:
+3. Écrire `git clone (url_de_votre_fork)`
+4. Ouvrir le nouveau dossier créé par git avec VS Code
+5. Exécuter les commandes suivantes:
 ```
-git init
-git remote add origin (url_de_votre_fork)
-git remote add upstream (url_du_projet)
+git remote add upstream (url_du_projet_principal)
 git checkout -b working_branch
 ```
+Vous avez maintenant une branche locale dans laquelle vous pouvez travailler. 
+Pour push dans votre fork, vous n'avez qu'à faire `git push origin (nom_de_votre_branche)`, puis faire une pull request 
+sur GitHub.
 
-À partir d'ici c'est comme la dernière fois
+Légende: 1=idul, 2=automate
+   -----------------------------------
+9 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+8 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+7 | .   .   .   2   .   .   .   .   . |
+  |            -------                |
+6 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+5 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+4 | .   .   .   .   .   .   1   .   . |
+  |                                   |
+3 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+2 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+1 | .   .   .   .   .   .   .   .   . |
+--|-----------------------------------
+  | 1   2   3   4   5   6   7   8   9

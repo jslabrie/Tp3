@@ -3,13 +3,12 @@ from quoridor import Quoridor
 
 
 class QuoridorX(Quoridor):
-
-    def __init__(self, joueurs, murs=None):
-       Quoridor.__init__(self, joueurs, murs=None)
-       self.état_actuel = Quoridor.état_partie(self)
-        
+    def __init__(self, joueurs, murs):
+        Quoridor.__init__(self, joueurs, murs)
+        self.état_actuel = Quoridor.état_partie(self)
+    
     def afficher(self):
-        # Initialisation du graphique
+         # Initialisation du graphique
         écran = turtle.Screen()
         écran.setup(width=600, height=600)
         écran.bgcolor('white')
@@ -102,12 +101,12 @@ class QuoridorX(Quoridor):
         pen.sety(-250)
         pen.forward(17)
         pen.left(90)
-        pen.forward(37)
+        pen.forward(32)
         for i in range(9):
             pen.forward(25)
             pen.write(i+1, font=('Time', 30, 'normal'))
             pen.forward(25)
-        
+
         # Placer les joueurs
         pen.setx(-200)
         pen.sety(-200)
@@ -182,10 +181,3 @@ class QuoridorX(Quoridor):
             pen.sety(-200)
             pen.right(90)
         pen.hideturtle()
-        turtle.done()
-
-# Pour tester
-if __name__ == "__main__":
-    état = QuoridorX('js')
-    état.afficher()
-

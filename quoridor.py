@@ -100,7 +100,6 @@ class Quoridor:
 
         self.murs = murs
         self.état_partie()
-        self.état_actuel = {}
 
     def __str__(self):
         """
@@ -236,13 +235,15 @@ class Quoridor:
 
         état = self.état_partie()
 
-        pos, type_coup = minimax.calc_best_move(état, joueur)
+        pos, type_coup, nouv_etat = minimax.calc_best_move(état, joueur)
 
         if type_coup in ('MH', 'MV'):
             orientation = 'horizontal' if type_coup == 'MH' else 'vertical'
             self.placer_mur(joueur, pos, orientation)
         else:
             self.déplacer_jeton(joueur, pos)
+        
+        return pos, type_coup
 
         
 
@@ -332,8 +333,8 @@ class Quoridor:
 
         self.murs = état["murs"]
 
-    def available_wall_positions(self):
-        '''Retourne un liste de tuples contenant les positions possibles de murs à ajouter'''
+    def afficher(self):
+        print(self)
 
 class QuoridorError(Exception):
     pass
